@@ -1,20 +1,26 @@
 //
-//  MFStack.swift
+//  MFQueue.swift
 //
 //
-//  Created by Михаил Фокин on 02.12.2023.
+//  Created by Михаил Фокин on 03.12.2023.
 //
 
 import Foundation
 
-public final class MFStack<T> {
+public final class MFQueue<T> {
 	
 	private var head: MFNode<T>?
+	private var tail: MFNode<T>?
 	private var countNodes: Int = 0
-	
-	/// Возвращает элемент на вершине стека
-	public var top: T? {
+
+	/// Возвращает элемент стоящий первым в очереди. (Следующий на удаление)
+	public var front: T? {
 		self.head?.value
+	}
+	
+	/// Возвращает элемент стоящий последним в очереди. (Только что добавленный)
+	public var back: T? {
+		self.tail?.value
 	}
 	
 	/// Проверка на пустоту
@@ -27,15 +33,20 @@ public final class MFStack<T> {
 		self.countNodes
 	}
 	
-	/// Добавление нового элемента
+	/// Добавление нового элемента в конец очереди
 	public func push(_ element: T) {
 		let node = MFNode(value: element)
-		node.next = self.head
-		self.head = node
+		if self.head == nil {
+			self.head = node
+			self.tail = node
+		} else {
+			self.tail?.next = node
+			self.tail = node
+		}
 		self.countNodes += 1
 	}
 	
-	/// Удаление элемента с вершины стэка
+	/// Удаление элемента стоящим первым на удаление, первым в очереди
 	@discardableResult
 	public func pop() -> T? {
 		let node = self.head
@@ -45,9 +56,10 @@ public final class MFStack<T> {
 		return node?.value
 	}
 	
-	/// Очистка стека
+	/// Очистка очереди
 	public func remoreAll() {
 		self.countNodes = 0
+		self.tail = nil
 		self.head = nil
 	}
 	
@@ -62,7 +74,8 @@ public final class MFStack<T> {
 	}
 }
 
-extension MFStack: Sequence {
+
+extension MFQueue: Sequence {
 	
 	public func makeIterator() -> MFListIterator<T> {
 		var iter = self.head
