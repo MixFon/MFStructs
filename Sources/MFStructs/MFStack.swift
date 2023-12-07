@@ -35,6 +35,13 @@ public final class MFStack<T> {
 		self.countNodes += 1
 	}
 	
+	/// Добавление последовательности новых элементов.
+	public func push<Source>(_ sequence: Source) where T == Source.Element, Source : Sequence {
+		for element in sequence {
+			self.push(element)
+		}
+	}
+	
 	/// Удаление элемента с вершины стэка
 	@discardableResult
 	public func pop() -> T? {
