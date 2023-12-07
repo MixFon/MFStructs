@@ -46,6 +46,13 @@ public final class MFQueue<T> {
 		self.countNodes += 1
 	}
 	
+	/// Добавление последовательности новых элементов.
+	public func push<Source>(_ sequence: Source) where T == Source.Element, Source : Sequence {
+		for element in sequence {
+			self.push(element)
+		}
+	}
+	
 	/// Удаление элемента стоящим первым на удаление, первым в очереди
 	@discardableResult
 	public func pop() -> T? {

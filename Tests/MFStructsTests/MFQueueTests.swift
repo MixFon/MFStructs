@@ -58,6 +58,20 @@ final class MFQueueTests: XCTestCase {
 		XCTAssertEqual(self.queue?.count, numbers.count)
 	}
 	
+	func testPushSequence() {
+		XCTAssertEqual(self.queue?.count, 0)
+		XCTAssertEqual(self.queue?.isEmpty, true)
+		self.queue?.push([1, 3, 5, 6, 7])
+		XCTAssertEqual(self.queue?.count, 5)
+		XCTAssertEqual(self.queue?.isEmpty, false)
+		self.queue?.push([8, 9, 10])
+		XCTAssertEqual(self.queue?.count, 8)
+		XCTAssertEqual(self.queue?.isEmpty, false)
+		self.queue?.remoreAll()
+		XCTAssertEqual(self.queue?.count, 0)
+		XCTAssertEqual(self.queue?.isEmpty, true)
+	}
+	
 	func testRemoveAll() {
 		// Arrange
 		let numbers = generateRandomIntArray(count: 10000, minValue: -10000, maxValue: 10000)
