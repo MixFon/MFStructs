@@ -17,27 +17,30 @@ public final class MFHeap<T> {
 		self.priorityFunction = priorityFunction
 	}
 
+	/// Количество элементов кучи
 	public var count: Int {
-		return items.count
+		self.items.count
 	}
 
-	public func peek() -> T? {
-		return items.first
+	/// Значение на вершине кучи
+	public var peek: T? {
+		self.items.first
 	}
 
+	///
 	public func insert(_ item: T) {
-		items.append(item)
+		self.items.append(item)
 		siftUp(from: items.count - 1)
 	}
 
 	public func extract() -> T? {
-		guard !items.isEmpty else { return nil }
+		guard !self.items.isEmpty else { return nil }
 
-		if items.count == 1 {
-			return items.removeLast()
+		if self.items.count == 1 {
+			return self.items.removeLast()
 		} else {
-			let root = items[0]
-			items[0] = items.removeLast()
+			let root = self.items[0]
+			self.items[0] = self.items.removeLast()
 			siftDown(from: 0)
 			return root
 		}
@@ -59,8 +62,8 @@ public final class MFHeap<T> {
 		var child = index
 		var parent = parentIndex(ofIndex: child)
 
-		while child > 0 && priorityFunction(items[child], items[parent]) {
-			items.swapAt(child, parent)
+		while child > 0 && priorityFunction(self.items[child], self.items[parent]) {
+			self.items.swapAt(child, parent)
 			child = parent
 			parent = parentIndex(ofIndex: child)
 		}
@@ -70,14 +73,14 @@ public final class MFHeap<T> {
 		let left = leftChildIndex(ofIndex: index)
 		let right = rightChildIndex(ofIndex: index)
 		var first = index
-		if left < items.count && priorityFunction(items[left], items[first]) {
+		if left < self.items.count && priorityFunction(self.items[left], self.items[first]) {
 			first = left
 		}
-		if right < items.count && priorityFunction(items[right], items[first]) {
+		if right < self.items.count && priorityFunction(self.items[right], self.items[first]) {
 			first = right
 		}
 		if first == index { return }
-		items.swapAt(index, first)
+		self.items.swapAt(index, first)
 		siftDown(from: first)
 	}
 }
