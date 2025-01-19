@@ -11,9 +11,13 @@ public final class MFHeap<T> {
 	
 	private var items: [T] = []
 	
+	/// Ограничитель. Задает максимально допустимое количество элементов в куче
+	private var limiter: Int?
+	
 	private let priorityFunction: (T, T) -> Bool
 
-	public init(priorityFunction: @escaping (T, T) -> Bool) {
+	public init(limiter: Int? = nil, priorityFunction: @escaping (T, T) -> Bool) {
+		self.limiter = limiter
 		self.priorityFunction = priorityFunction
 	}
 
@@ -27,12 +31,16 @@ public final class MFHeap<T> {
 		self.items.first
 	}
 
-	///
+	/// Вставка элемента
 	public func insert(_ item: T) {
 		self.items.append(item)
 		siftUp(from: items.count - 1)
+		if let limiter, self.items.count > limiter {
+			self.items.removeLast()
+		}
 	}
 
+	/// Возвращает верхний элемент кучи
 	public func extract() -> T? {
 		guard !self.items.isEmpty else { return nil }
 
