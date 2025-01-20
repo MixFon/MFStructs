@@ -7,17 +7,13 @@
 
 import Foundation
 
-public final class MFHeap<T> {
+public class MFHeap<T> {
 	
-	private var items: [T] = []
-	
-	/// Ограничитель. Задает максимально допустимое количество элементов в куче
-	private var limiter: Int?
-	
+	internal var items: [T] = []
+
 	private let priorityFunction: (T, T) -> Bool
 
-	public init(limiter: Int? = nil, priorityFunction: @escaping (T, T) -> Bool) {
-		self.limiter = limiter
+	public init(priorityFunction: @escaping (T, T) -> Bool) {
 		self.priorityFunction = priorityFunction
 	}
 
@@ -35,9 +31,6 @@ public final class MFHeap<T> {
 	public func insert(_ item: T) {
 		self.items.append(item)
 		siftUp(from: items.count - 1)
-		if let limiter, self.items.count > limiter {
-			self.items.removeLast()
-		}
 	}
 
 	/// Возвращает верхний элемент кучи
@@ -90,5 +83,24 @@ public final class MFHeap<T> {
 		if first == index { return }
 		self.items.swapAt(index, first)
 		siftDown(from: first)
+	}
+}
+
+/// Куча с ограничением. Удалит
+public class MFLimitedHeap<T>: MFHeap<T> {
+	/// Ограничитель. Задает максимально допустимое количество элементов в куче
+	private var limiter: Int?
+	
+	public init(limiter: Int? = nil, priorityFunction: @escaping (T, T) -> Bool) {
+		self.limiter = limiter
+		super.init(priorityFunction: priorityFunction)
+	}
+	
+	/// Вставка элемента
+	public func insert(_ item: T, complitionRemove: @escaping (T) -> (Void)) {
+		self.insert(item)
+		if let limiter, self.count > limiter, self.count > 0 {
+			complitionRemove(self.items.removeLast())
+		}
 	}
 }
