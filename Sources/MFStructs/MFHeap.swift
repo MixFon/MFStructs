@@ -11,7 +11,7 @@ public class MFHeap<T> {
 	
 	internal var items: [T] = []
 
-	private let priorityFunction: (T, T) -> Bool
+	internal let priorityFunction: (T, T) -> Bool
 
 	public init(priorityFunction: @escaping (T, T) -> Bool) {
 		self.priorityFunction = priorityFunction
@@ -59,7 +59,7 @@ public class MFHeap<T> {
 		return 2 * i + 2
 	}
 
-	private func siftUp(from index: Int) {
+	internal func siftUp(from index: Int) {
 		var child = index
 		var parent = parentIndex(ofIndex: child)
 
@@ -86,7 +86,7 @@ public class MFHeap<T> {
 	}
 }
 
-/// Куча с ограничением. Удалит
+/// Куча с ограничением. Удалит элемент с минимальным значением
 public class MFLimitedHeap<T>: MFHeap<T> {
 	/// Ограничитель. Задает максимально допустимое количество элементов в куче
 	private var limiter: Int?
@@ -97,10 +97,29 @@ public class MFLimitedHeap<T>: MFHeap<T> {
 	}
 	
 	/// Вставка элемента
-	public func insert(_ item: T, complitionRemove: @escaping (T) -> (Void)) {
+	public func insert(_ item: T, complitionRemove: @escaping (T?) -> (Void)) {
 		self.insert(item)
 		if let limiter, self.count > limiter, self.count > 0 {
-			complitionRemove(self.items.removeLast())
+			complitionRemove(removePriorityMinElement())
 		}
 	}
+	
+	private func removePriorityMinElement() -> T? {
+		var iterator = self.count / 2
+		var priorityMinIndex: Int = iterator
+		var minElement: T = self.items[iterator]
+		while iterator < self.count {
+			let element = self.items[iterator]
+			if !self.priorityFunction(element, minElement) {
+				minElement = element
+				priorityMinIndex = iterator
+			}
+			iterator += 1
+		}
+		self.items.swapAt(priorityMinIndex, self.count - 1)
+		siftUp(from: priorityMinIndex)
+		return self.items.removeLast()
+	}
+	
+	
 }
