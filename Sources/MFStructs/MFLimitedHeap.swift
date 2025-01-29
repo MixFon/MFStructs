@@ -23,6 +23,7 @@ public class MFLimitedHeap<T>: MFHeap<T> {
 		}
 	}
 	
+	/// Удаляет элемент с самым низким приоритетом, проводит балансировку
 	private func removePriorityMinElement() -> T? {
 		var iterator = self.count / 2
 		var priorityMinIndex: Int = iterator

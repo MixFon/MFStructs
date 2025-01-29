@@ -59,6 +59,7 @@ public class MFHeap<T> {
 		return 2 * i + 2
 	}
 
+	/// Просеивание вверх относительно приоритетов
 	internal func siftUp(from index: Int) {
 		var child = index
 		var parent = parentIndex(ofIndex: child)
@@ -70,6 +71,7 @@ public class MFHeap<T> {
 		}
 	}
 
+	/// Просеивание вниз относительно приоритетов
 	private func siftDown(from index: Int) {
 		let left = leftChildIndex(ofIndex: index)
 		let right = rightChildIndex(ofIndex: index)
