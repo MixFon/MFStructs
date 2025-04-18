@@ -30,23 +30,27 @@ final class MFSegmentTree<T> {
 	private var sequence: [T] = []
 	private let converter: (T, T) -> T
 	private var neutralElement: T
-	/// Количество элементов исходного массива
-	private let countStartArray: Int
+	/// Длина массива расширенного до 2^k
+	private let lenght: Int
 	
 	init(array: [T], neutralElement: T, converter: @escaping (T, T) -> T) {
 		self.converter = converter
 		self.neutralElement = neutralElement
-		self.countStartArray = array.count
-		let lenght = getLenght(lenght: array.count)
-		self.sequence = Array(repeating: neutralElement, count: lenght)
-		let i = lenght / 2
-		self.sequence.replaceSubrange(i..<i+array.count, with: array)
-		fillTree(index: i - 1)
+		// Возвращает количество элементов, необходимое для построения структуры
+		// Количество элементов в массиве 2N - 1, где N = 2^k первое число стемени двойки большее длины.
+		var i = 1
+		while i < array.count { i <<= 1 }
+		self.lenght = i
+		let lenghtSequence = 2 * self.lenght - 1
+		self.sequence = Array(repeating: neutralElement, count: lenghtSequence)
+		let startIndex = lenghtSequence / 2
+		self.sequence.replaceSubrange(startIndex..<startIndex+array.count, with: array)
+		fillTree(index: startIndex - 1)
 	}
 	
 	func request(left: Int, right: Int) -> T {
 		let l = 0
-		let r = self.countStartArray - 1
+		let r = self.lenght - 1
 		return workingRequest(i: 0, l: l, r: r, left: left, right: right)
 	}
 	
@@ -58,31 +62,21 @@ final class MFSegmentTree<T> {
 	/// - left левая граница поискового диапазона
 	/// - right правая граница поискового диапазона
 	private func workingRequest(i: Int, l: Int, r: Int, left: Int, right: Int) -> T {
-		guard i < self.sequence.count, i >= 0 else { return neutralElement }
-		if left <= l && r <= right {
-			// Полностью накрыли
-			return self.sequence[i]
-		} else if r < left || right < l {
+		if right < l || left > r {
 			// Нет пересечения
 			return neutralElement
+			
+		} else if left <= l && r <= right {
+			// Полностью накрыли
+			return self.sequence[i]
 		} else {
+			// Рассматриваем потомков
 			let nexIndex = i * 2 + 1
 			let mid = (l + r) / 2
-			let resultLeft = workingRequest( i: nexIndex, 	  l: l, 	  r: mid, 	left: left, right: right)
 			let resultRight = workingRequest(i: nexIndex + 1, l: mid + 1, r: r, 	left: left, right: right)
+			let resultLeft = workingRequest( i: nexIndex, 	  l: l, 	  r: mid, 	left: left, right: right)
 			return self.converter(resultLeft, resultRight)
 		}
-	}
-	
-	/// Возвращает количество элементов, необходимое для построения структуры
-	/// Количество элементов в массиве 2N - 1, где N = 2^k первое число стемени двойки большее длины.
-	private func getLenght(lenght: Int) -> Int {
-		if lenght <= 0 { return 0 }
-		var i = 1
-		while i < lenght {
-			i <<= 1
-		}
-		return 2 * i - 1
 	}
 	
 	/// Заполняем дерево

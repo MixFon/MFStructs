@@ -124,17 +124,20 @@ final class MFSegmentTreeTests: XCTestCase {
 		var count: Int = 1
 	}
 
-	private func compare(one: Node, two: Node) -> Node {
-		if one.value == two.value {
-			return Node(value: one.value, count: one.count + two.count)
-		} else if one.value > two.value {
-			return one
-		} else {
-			return two
-		}
-	}
+
 	
 	func testFindCountMax() {
+		
+		func compare(one: Node, two: Node) -> Node {
+			if one.value == two.value {
+				return Node(value: one.value, count: one.count + two.count)
+			} else if one.value > two.value {
+				return one
+			} else {
+				return two
+			}
+		}
+		
 		// Arrange
 		let three = MFSegmentTree<Node>(
 			// [5, 5, 3, 1, 5, 2, 4]
@@ -187,6 +190,62 @@ final class MFSegmentTreeTests: XCTestCase {
 		XCTAssertEqual(three.request(left: 6, right: 6), Node(value: 4, count: 1))
 
 	}
+	
+	func testFindCountMaxNode() {
+		func compare(one: Node, two: Node) -> Node {
+			if one.value == two.value {
+				return Node(value: one.value, count: one.count + two.count)
+			} else if one.value >= two.value {
+				return one
+			} else {
+				return two
+			}
+		}
+		// Arrange
+		let three = MFSegmentTree<Node>(
+			array: [
+				Node(value: 18),
+				Node(value: 16),
+				Node(value: 20),
+				Node(value: 2),
+				Node(value: 53),
+				Node(value: 57),
+				Node(value: 39),
+				Node(value: 97),
+				Node(value: 21),
+				Node(value: 59)
+			],
+			neutralElement: Node(value:Int.min),
+			converter: compare
+		)
+		// 18 16 20  2 53 57 39 97 21 59
+		//  0  1  2  3  4  5  6  7  8  9
+		
+		// 3 10 -> 97 1
+		// 1 10 -> 97 1
+		// 3 4  -> 20 1
+		// 9 10 -> 59 1
+		// 8 10 -> 97 1
+		// 5 8  -> 97 1
+		// 6 7  -> 57 1
+		// 5 8  -> 97 1
+		// 1 10 -> 97 1
+		// 7 9  -> 97 1
+		// Act
+		
+		// Assert
+		XCTAssertEqual(three.request(left: 3 - 1, right: 10 - 1), Node(value: 97, count: 1))
+		XCTAssertEqual(three.request(left: 1 - 1, right: 10 - 1), Node(value: 97, count: 1))
+		XCTAssertEqual(three.request(left: 3 - 1, right:  4 - 1), Node(value: 20, count: 1))
+		XCTAssertEqual(three.request(left: 9 - 1, right: 10 - 1), Node(value: 59, count: 1))
+		XCTAssertEqual(three.request(left: 8 - 1, right: 10 - 1), Node(value: 97, count: 1))
+		XCTAssertEqual(three.request(left: 5 - 1, right:  8 - 1), Node(value: 97, count: 1))
+		XCTAssertEqual(three.request(left: 6 - 1, right:  7 - 1), Node(value: 57, count: 1))
+		XCTAssertEqual(three.request(left: 5 - 1, right:  8 - 1), Node(value: 97, count: 1))
+		XCTAssertEqual(three.request(left: 1 - 1, right: 10 - 1), Node(value: 97, count: 1))
+		XCTAssertEqual(three.request(left: 7 - 1, right:  9 - 1), Node(value: 97, count: 1))
+	}
+
 
 
 
