@@ -246,7 +246,31 @@ final class MFSegmentTreeTests: XCTestCase {
 		XCTAssertEqual(three.request(left: 7 - 1, right:  9 - 1), Node(value: 97, count: 1))
 	}
 
+	func testUpdate() {
+		// Arrange
+		let three = MFSegmentTree(
+			array: [2, 5, 3, 1, 7, 2, 4],
+			neutralElement: Int.min,
+			converter: max
+		)
+		
+		three.update(element: 22, index: 6)
+		
+		XCTAssertEqual(three.request(left: 0, right: 3), 5)
+		XCTAssertEqual(three.request(left: 0, right: 6), 22)
+		XCTAssertEqual(three.request(left: 5, right: 6), 22)
+		XCTAssertEqual(three.request(left: 6, right: 6), 22)
+		
+		three.update(element: 30, index: 2)
+		
+		XCTAssertEqual(three.request(left: 0, right: 3), 30)
+		XCTAssertEqual(three.request(left: 0, right: 6), 30)
+		XCTAssertEqual(three.request(left: 1, right: 3), 30)
+		XCTAssertEqual(three.request(left: 1, right: 4), 30)
+		XCTAssertEqual(three.request(left: 2, right: 6), 30)
+		XCTAssertEqual(three.request(left: 5, right: 6), 22)
+		XCTAssertEqual(three.request(left: 6, right: 6), 22)
 
-
+	}
 
 }

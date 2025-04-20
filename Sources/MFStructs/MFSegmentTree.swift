@@ -48,6 +48,24 @@ final class MFSegmentTree<T> {
 		fillTree(index: startIndex - 1)
 	}
 	
+	func update(element: T, index: Int) {
+		let indexUpdate = lenght - 1 + index
+		guard indexUpdate >= 0, indexUpdate < self.sequence.count else { return }
+		// Меняем элемент на по индекму N-1 + index но новый
+		self.sequence[indexUpdate] = element
+		var indexParent = (indexUpdate - 1) / 2
+		while indexParent >= 0 {
+			let indexLeftChild = 2 * indexParent + 1
+			let indexRightChild = indexLeftChild + 1
+			let leftChild = self.sequence[indexLeftChild]
+			let rightChild = self.sequence[indexRightChild]
+			self.sequence[indexParent] = self.converter(leftChild, rightChild)
+			let indexNextParent = (indexParent - 1) / 2
+			if indexParent == 0 && indexNextParent == 0 { break }
+			indexParent = indexNextParent
+		}
+	}
+	
 	func request(left: Int, right: Int) -> T {
 		let l = 0
 		let r = self.lenght - 1
