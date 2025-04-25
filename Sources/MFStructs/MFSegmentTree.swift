@@ -25,7 +25,7 @@
 // Если нет пересечения, возвращаем нейтральный элемент l r left right | left right l r
 // Если есть пересечение запускаем рекурсивную функцию для детей
 
-final class MFSegmentTree<T> {
+final public class MFSegmentTree<T> {
 	
 	private var sequence: [T] = []
 	private let converter: (T, T) -> T
@@ -33,7 +33,7 @@ final class MFSegmentTree<T> {
 	/// Длина массива расширенного до 2^k
 	private let lenght: Int
 	
-	init(array: [T], neutralElement: T, converter: @escaping (T, T) -> T) {
+	public init(array: [T], neutralElement: T, converter: @escaping (T, T) -> T) {
 		self.converter = converter
 		self.neutralElement = neutralElement
 		// Возвращает количество элементов, необходимое для построения структуры
@@ -48,7 +48,7 @@ final class MFSegmentTree<T> {
 		fillTree(index: startIndex - 1)
 	}
 	
-	func update(element: T, index: Int) {
+	public func update(element: T, index: Int) {
 		let indexUpdate = lenght - 1 + index
 		guard indexUpdate >= 0, indexUpdate < self.sequence.count else { return }
 		// Меняем элемент на по индекму N-1 + index но новый
@@ -66,7 +66,7 @@ final class MFSegmentTree<T> {
 		}
 	}
 	
-	func request(left: Int, right: Int) -> T {
+	public func request(left: Int, right: Int) -> T {
 		let l = 0
 		let r = self.lenght - 1
 		return workingRequest(i: 0, l: l, r: r, left: left, right: right)
