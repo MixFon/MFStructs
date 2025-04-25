@@ -8,6 +8,7 @@
 import Foundation
 /// Дерево Фенвика (или Fenwick Tree, оно же Binary Indexed Tree — BIT) — это структура данных,
 /// предназначенная для эффективного хранения и обработки префиксных сумм.
+/// Индексания элементов идет с 1 чтобы удобно было вычисля значение на полуинтервале
 final public class MFBinaryIndexedTree<T> {
 	
 	private var tree: [T]

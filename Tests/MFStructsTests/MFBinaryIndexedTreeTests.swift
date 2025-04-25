@@ -20,9 +20,16 @@ final class MFBinaryIndexedTreeTests: XCTestCase {
 		
 		// Act
 		
-		
 		// Assert
-		XCTAssertEqual(three.query(to: 1), 2)
+		XCTAssertEqual(three.query(to: 0), 0)     // Нейтральный элемент
+		XCTAssertEqual(three.query(to: 1), 2)     // [2]
+		XCTAssertEqual(three.query(to: 2), 7)     // [2, 5]
+		XCTAssertEqual(three.query(to: 3), 10)    // [2, 5, 3]
+		XCTAssertEqual(three.query(to: 4), 11)    // [2, 5, 3, 1]
+		XCTAssertEqual(three.query(to: 5), 18)    // [2, 5, 3, 1, 7]
+		XCTAssertEqual(three.query(to: 6), 20)    // [2, 5, 3, 1, 7, 2]
+		XCTAssertEqual(three.query(to: 7), 24)    // [2, 5, 3, 1, 7, 2, 4]
+		XCTAssertEqual(three.query(to: 8), nil)   // nil
 	}
 
 
@@ -34,46 +41,46 @@ final class MFBinaryIndexedTreeTests: XCTestCase {
 			converter: +
 		)
 		func request(left: Int, right: Int) -> Int {
-			return (three.query(to: right + 1) ?? 0) - (three.query(to: left) ?? 0)
+			return (three.query(to: right) ?? 0) - (three.query(to: left - 1) ?? 0)
 		}
 		
 		// Act
 		
 		// Assert
-		XCTAssertEqual(request(left: 0, right: 0), 2)
-		XCTAssertEqual(request(left: 0, right: 1), 7)
-		XCTAssertEqual(request(left: 0, right: 2), 10)
-		XCTAssertEqual(request(left: 0, right: 3), 11)
-		XCTAssertEqual(request(left: 0, right: 4), 18)
-		XCTAssertEqual(request(left: 0, right: 5), 20)
-		XCTAssertEqual(request(left: 0, right: 6), 24)
-
-		XCTAssertEqual(request(left: 1, right: 1), 5)
-		XCTAssertEqual(request(left: 1, right: 2), 8)
-		XCTAssertEqual(request(left: 1, right: 3), 9)
-		XCTAssertEqual(request(left: 1, right: 4), 16)
+		XCTAssertEqual(request(left: 1, right: 1), 2)
+		XCTAssertEqual(request(left: 1, right: 2), 7)
+		XCTAssertEqual(request(left: 1, right: 3), 10)
+		XCTAssertEqual(request(left: 1, right: 4), 11)
 		XCTAssertEqual(request(left: 1, right: 5), 18)
-		XCTAssertEqual(request(left: 1, right: 6), 22)
+		XCTAssertEqual(request(left: 1, right: 6), 20)
+		XCTAssertEqual(request(left: 1, right: 7), 24)
 
-		XCTAssertEqual(request(left: 2, right: 2), 3)
-		XCTAssertEqual(request(left: 2, right: 3), 4)
-		XCTAssertEqual(request(left: 2, right: 4), 11)
-		XCTAssertEqual(request(left: 2, right: 5), 13)
-		XCTAssertEqual(request(left: 2, right: 6), 17)
+		XCTAssertEqual(request(left: 2, right: 2), 5)
+		XCTAssertEqual(request(left: 2, right: 3), 8)
+		XCTAssertEqual(request(left: 2, right: 4), 9)
+		XCTAssertEqual(request(left: 2, right: 5), 16)
+		XCTAssertEqual(request(left: 2, right: 6), 18)
+		XCTAssertEqual(request(left: 2, right: 7), 22)
 
-		XCTAssertEqual(request(left: 3, right: 3), 1)
-		XCTAssertEqual(request(left: 3, right: 4), 8)
-		XCTAssertEqual(request(left: 3, right: 5), 10)
-		XCTAssertEqual(request(left: 3, right: 6), 14)
+		XCTAssertEqual(request(left: 3, right: 3), 3)
+		XCTAssertEqual(request(left: 3, right: 4), 4)
+		XCTAssertEqual(request(left: 3, right: 5), 11)
+		XCTAssertEqual(request(left: 3, right: 6), 13)
+		XCTAssertEqual(request(left: 3, right: 7), 17)
 
-		XCTAssertEqual(request(left: 4, right: 4), 7)
-		XCTAssertEqual(request(left: 4, right: 5), 9)
-		XCTAssertEqual(request(left: 4, right: 6), 13)
+		XCTAssertEqual(request(left: 4, right: 4), 1)
+		XCTAssertEqual(request(left: 4, right: 5), 8)
+		XCTAssertEqual(request(left: 4, right: 6), 10)
+		XCTAssertEqual(request(left: 4, right: 7), 14)
 
-		XCTAssertEqual(request(left: 5, right: 5), 2)
-		XCTAssertEqual(request(left: 5, right: 6), 6)
+		XCTAssertEqual(request(left: 5, right: 5), 7)
+		XCTAssertEqual(request(left: 5, right: 6), 9)
+		XCTAssertEqual(request(left: 5, right: 7), 13)
 
-		XCTAssertEqual(request(left: 6, right: 6), 4)
+		XCTAssertEqual(request(left: 6, right: 6), 2)
+		XCTAssertEqual(request(left: 6, right: 7), 6)
+
+		XCTAssertEqual(request(left: 7, right: 7), 4)
     }
 
 }
