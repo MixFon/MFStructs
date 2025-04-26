@@ -12,36 +12,38 @@ final class MFBinaryIndexedTreeTests: XCTestCase {
 	
 	func testPrefixSumm() {
 		// Arrange
-		let three = MFBinaryIndexedTree<Int>(
+		let tree = MFBinaryIndexedTree<Int>(
 			array: [2, 5, 3, 1, 7, 2, 4],
-			neutralElement: 0,
-			converter: +
+			neutral: 0,
+			converter: +,
+			stabilizer: -
 		)
 		
 		// Act
 		
 		// Assert
-		XCTAssertEqual(three.query(to: 0), 0)     // Нейтральный элемент
-		XCTAssertEqual(three.query(to: 1), 2)     // [2]
-		XCTAssertEqual(three.query(to: 2), 7)     // [2, 5]
-		XCTAssertEqual(three.query(to: 3), 10)    // [2, 5, 3]
-		XCTAssertEqual(three.query(to: 4), 11)    // [2, 5, 3, 1]
-		XCTAssertEqual(three.query(to: 5), 18)    // [2, 5, 3, 1, 7]
-		XCTAssertEqual(three.query(to: 6), 20)    // [2, 5, 3, 1, 7, 2]
-		XCTAssertEqual(three.query(to: 7), 24)    // [2, 5, 3, 1, 7, 2, 4]
-		XCTAssertEqual(three.query(to: 8), nil)   // nil
+		XCTAssertEqual(tree.query(to: 0), 0)     // Нейтральный элемент
+		XCTAssertEqual(tree.query(to: 1), 2)     // [2]
+		XCTAssertEqual(tree.query(to: 2), 7)     // [2, 5]
+		XCTAssertEqual(tree.query(to: 3), 10)    // [2, 5, 3]
+		XCTAssertEqual(tree.query(to: 4), 11)    // [2, 5, 3, 1]
+		XCTAssertEqual(tree.query(to: 5), 18)    // [2, 5, 3, 1, 7]
+		XCTAssertEqual(tree.query(to: 6), 20)    // [2, 5, 3, 1, 7, 2]
+		XCTAssertEqual(tree.query(to: 7), 24)    // [2, 5, 3, 1, 7, 2, 4]
+		XCTAssertEqual(tree.query(to: 8), nil)   // nil
 	}
 
 
     func testPrefixSummOnInterval() throws {
 		// Arrange
-		let three = MFBinaryIndexedTree<Int>(
+		let tree = MFBinaryIndexedTree<Int>(
 			array: [2, 5, 3, 1, 7, 2, 4],
-			neutralElement: 0,
-			converter: +
+			neutral: 0,
+			converter: +,
+			stabilizer: -
 		)
 		func request(left: Int, right: Int) -> Int {
-			return (three.query(to: right) ?? 0) - (three.query(to: left - 1) ?? 0)
+			return (tree.query(to: right) ?? 0) - (tree.query(to: left - 1) ?? 0)
 		}
 		
 		// Act
@@ -82,5 +84,96 @@ final class MFBinaryIndexedTreeTests: XCTestCase {
 
 		XCTAssertEqual(request(left: 7, right: 7), 4)
     }
+	
+	func testUpdate() {
+		// Arrange
+		let tree = MFBinaryIndexedTree<Int>(
+			array: [2, 5, 3, 1, 7, 2, 4],
+			neutral: 0,
+			converter: +,
+			stabilizer: -
+		)
+		
+		// Act
+		
+		
+		// Assert
+												  // [2, 5, 3, 1, 7, 2, 4]
+		XCTAssertEqual(tree.query(to: 0), 0)     // Нейтральный элемент
+		XCTAssertEqual(tree.query(to: 1), 2)     // [2]
+		XCTAssertEqual(tree.query(to: 2), 7)     // [2, 5]
+		XCTAssertEqual(tree.query(to: 3), 10)    // [2, 5, 3]
+		XCTAssertEqual(tree.query(to: 4), 11)    // [2, 5, 3, 1]
+		XCTAssertEqual(tree.query(to: 5), 18)    // [2, 5, 3, 1, 7]
+		XCTAssertEqual(tree.query(to: 6), 20)    // [2, 5, 3, 1, 7, 2]
+		XCTAssertEqual(tree.query(to: 7), 24)    // [2, 5, 3, 1, 7, 2, 4]
+		XCTAssertEqual(tree.query(to: 8), nil)   // nil
+		
+		tree.update(6, at: 5) 					 // [2, 5, 3, 1, 6, 2, 4]
+		XCTAssertEqual(tree.query(to: 0), 0)     // Нейтральный элемент
+		XCTAssertEqual(tree.query(to: 1), 2)     // [2]
+		XCTAssertEqual(tree.query(to: 2), 7)     // [2, 5]
+		XCTAssertEqual(tree.query(to: 3), 10)    // [2, 5, 3]
+		XCTAssertEqual(tree.query(to: 4), 11)    // [2, 5, 3, 1]
+		XCTAssertEqual(tree.query(to: 5), 17)    // [2, 5, 3, 1, 6]
+		XCTAssertEqual(tree.query(to: 6), 19)    // [2, 5, 3, 1, 6, 2]
+		XCTAssertEqual(tree.query(to: 7), 23)    // [2, 5, 3, 1, 6, 2, 4]
+		XCTAssertEqual(tree.query(to: 8), nil)   // nil
+		
+		tree.update(6, at: 5) 					 // [2, 5, 3, 1, 6, 2, 4] (copy)
+		XCTAssertEqual(tree.query(to: 0), 0)     // Нейтральный элемент
+		XCTAssertEqual(tree.query(to: 1), 2)     // [2]
+		XCTAssertEqual(tree.query(to: 2), 7)     // [2, 5]
+		XCTAssertEqual(tree.query(to: 3), 10)    // [2, 5, 3]
+		XCTAssertEqual(tree.query(to: 4), 11)    // [2, 5, 3, 1]
+		XCTAssertEqual(tree.query(to: 5), 17)    // [2, 5, 3, 1, 6]
+		XCTAssertEqual(tree.query(to: 6), 19)    // [2, 5, 3, 1, 6, 2]
+		XCTAssertEqual(tree.query(to: 7), 23)    // [2, 5, 3, 1, 6, 2, 4]
+		XCTAssertEqual(tree.query(to: 8), nil)   // nil
+		
+		tree.update(10, at: 5) 					 // [2, 5, 3, 1, 10, 2, 4]
+		XCTAssertEqual(tree.query(to: 0), 0)     // Нейтральный элемент
+		XCTAssertEqual(tree.query(to: 1), 2)     // [2]
+		XCTAssertEqual(tree.query(to: 2), 7)     // [2, 5]
+		XCTAssertEqual(tree.query(to: 3), 10)    // [2, 5, 3]
+		XCTAssertEqual(tree.query(to: 4), 11)    // [2, 5, 3, 1]
+		XCTAssertEqual(tree.query(to: 5), 21)    // [2, 5, 3, 1, 10]
+		XCTAssertEqual(tree.query(to: 6), 23)    // [2, 5, 3, 1, 10, 2]
+		XCTAssertEqual(tree.query(to: 7), 27)    // [2, 5, 3, 1, 10, 2, 4]
+		XCTAssertEqual(tree.query(to: 8), nil)   // nil
+		
+		tree.update(6, at: 3) 					 // [2, 5, 6, 1, 10, 2, 4]
+		XCTAssertEqual(tree.query(to: 0), 0)     // Нейтральный элемент
+		XCTAssertEqual(tree.query(to: 1), 2)     // [2]
+		XCTAssertEqual(tree.query(to: 2), 7)     // [2, 5]
+		XCTAssertEqual(tree.query(to: 3), 13)    // [2, 5, 6]
+		XCTAssertEqual(tree.query(to: 4), 14)    // [2, 5, 6, 1]
+		XCTAssertEqual(tree.query(to: 5), 24)    // [2, 5, 6, 1, 10]
+		XCTAssertEqual(tree.query(to: 6), 26)    // [2, 5, 6, 1, 10, 2]
+		XCTAssertEqual(tree.query(to: 7), 30)    // [2, 5, 6, 1, 10, 2, 4]
+		XCTAssertEqual(tree.query(to: 8), nil)   // nil
+		
+		tree.update(-2, at: 1) 					 // [-2, 5, 6, 1, 10, 2, 4]
+		XCTAssertEqual(tree.query(to: 0), 0)     // Нейтральный элемент
+		XCTAssertEqual(tree.query(to: 1), -2)    // [-2]
+		XCTAssertEqual(tree.query(to: 2),  3)    // [-2, 5]
+		XCTAssertEqual(tree.query(to: 3),  9)    // [-2, 5, 6]
+		XCTAssertEqual(tree.query(to: 4), 10)    // [-2, 5, 6, 1]
+		XCTAssertEqual(tree.query(to: 5), 20)    // [-2, 5, 6, 1, 10]
+		XCTAssertEqual(tree.query(to: 6), 22)    // [-2, 5, 6, 1, 10, 2]
+		XCTAssertEqual(tree.query(to: 7), 26)    // [-2, 5, 6, 1, 10, 2, 4]
+		XCTAssertEqual(tree.query(to: 8), nil)   // nil
+		
+		tree.update(6, at: 7) 					 // [-2, 5, 6, 1, 10, 2, 6]
+		XCTAssertEqual(tree.query(to: 0), 0)     // Нейтральный элемент
+		XCTAssertEqual(tree.query(to: 1), -2)    // [-2]
+		XCTAssertEqual(tree.query(to: 2),  3)    // [-2, 5]
+		XCTAssertEqual(tree.query(to: 3),  9)    // [-2, 5, 6]
+		XCTAssertEqual(tree.query(to: 4), 10)    // [-2, 5, 6, 1]
+		XCTAssertEqual(tree.query(to: 5), 20)    // [-2, 5, 6, 1, 10]
+		XCTAssertEqual(tree.query(to: 6), 22)    // [-2, 5, 6, 1, 10, 2]
+		XCTAssertEqual(tree.query(to: 7), 28)    // [-2, 5, 6, 1, 10, 2, 6]
+		XCTAssertEqual(tree.query(to: 8), nil)   // nil
+	}
 
 }
