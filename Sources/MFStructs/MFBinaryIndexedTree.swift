@@ -40,6 +40,26 @@ final public class MFBinaryIndexedTree<T> {
 		}
 	}
 	
+	/// Инициализирует структуру с заданным массивом, нейтральным элементом и функциями преобразования и стабилизации.
+	///
+	/// - Parameters:
+	///   - count: Количество элементов в дереве. Массив будет заполнен neutral.
+	///   - neutral: Нейтральный элемент типа `T`, который используется для начальной инициализации внутренних данных.
+	///   - converter: Функция, принимающая два элемента типа `T` и возвращающая их преобразованное значение.
+	///   - stabilizer: Функция, принимающая два элемента типа `T` и возвращающая стабилизированное значение.
+	///
+	/// Метод создаёт внутреннее хранилище на основе массива, заполняя его нейтральными элементами.
+	/// Затем происходит "просеивание вверх" (`siftUp`) каждого элемента массива для корректной настройки структуры.
+	///
+	/// - Note: Индексация внутреннего массива начинается с 1 (нулевой элемент — нейтральный).
+	public init(count: Int, neutral: T, converter: @escaping (T, T) -> T, stabilizer: @escaping (T, T) -> T) {
+		self.tree = Array(repeating: neutral, count: count + 1)
+		self.array = Array(repeating: neutral, count: count + 1)
+		self.neutral = neutral
+		self.converter = converter
+		self.stabilizer = stabilizer
+	}
+	
 	/// Обновляет значение элемента в массиве по заданному индексу и корректирует структуру.
 	///
 	/// - Parameters:
@@ -55,7 +75,6 @@ final public class MFBinaryIndexedTree<T> {
 		let delta = self.stabilizer(value, self.array[index])
 		self.array[index] = value
 		self.siftUp(delta, at: index)
-		print(array)
 	}
 	
 	/// Выполняет запрос результата на префиксе заданной длины.
