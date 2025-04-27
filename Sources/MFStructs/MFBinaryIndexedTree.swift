@@ -77,6 +77,22 @@ final public class MFBinaryIndexedTree<T> {
 		self.siftUp(delta, at: index)
 	}
 	
+	/// Выполняет запрос агрегированного значения на полуинтервале [left, right].
+	///
+	/// - Parameters:
+	///   - left: Левая граница интервала (включительно).
+	///   - right: Правая граница интервала (включительно).
+	/// - Returns: Результат агрегации элементов на указанном интервале.
+	///
+	/// Метод использует результаты префиксных запросов от начала до `right` и до `left - 1`,
+	/// а затем применяет функцию `stabilizer` для получения итогового значения на заданном интервале.
+	///
+	public func request(left: Int, right: Int) -> T {
+		let rightValue = query(to: right) ?? self.neutral
+		let leftValue = query(to: left - 1) ?? self.neutral
+		return self.stabilizer(rightValue, leftValue)
+	}
+	
 	/// Выполняет запрос результата на префиксе заданной длины.
 	///
 	/// - Parameters:

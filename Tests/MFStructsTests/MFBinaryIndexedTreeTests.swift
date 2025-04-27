@@ -42,47 +42,44 @@ final class MFBinaryIndexedTreeTests: XCTestCase {
 			converter: +,
 			stabilizer: -
 		)
-		func request(left: Int, right: Int) -> Int {
-			return (tree.query(to: right) ?? 0) - (tree.query(to: left - 1) ?? 0)
-		}
 		
 		// Act
 		
 		// Assert
-		XCTAssertEqual(request(left: 1, right: 1), 2)
-		XCTAssertEqual(request(left: 1, right: 2), 7)
-		XCTAssertEqual(request(left: 1, right: 3), 10)
-		XCTAssertEqual(request(left: 1, right: 4), 11)
-		XCTAssertEqual(request(left: 1, right: 5), 18)
-		XCTAssertEqual(request(left: 1, right: 6), 20)
-		XCTAssertEqual(request(left: 1, right: 7), 24)
+		XCTAssertEqual(tree.request(left: 1, right: 1), 2)
+		XCTAssertEqual(tree.request(left: 1, right: 2), 7)
+		XCTAssertEqual(tree.request(left: 1, right: 3), 10)
+		XCTAssertEqual(tree.request(left: 1, right: 4), 11)
+		XCTAssertEqual(tree.request(left: 1, right: 5), 18)
+		XCTAssertEqual(tree.request(left: 1, right: 6), 20)
+		XCTAssertEqual(tree.request(left: 1, right: 7), 24)
 
-		XCTAssertEqual(request(left: 2, right: 2), 5)
-		XCTAssertEqual(request(left: 2, right: 3), 8)
-		XCTAssertEqual(request(left: 2, right: 4), 9)
-		XCTAssertEqual(request(left: 2, right: 5), 16)
-		XCTAssertEqual(request(left: 2, right: 6), 18)
-		XCTAssertEqual(request(left: 2, right: 7), 22)
+		XCTAssertEqual(tree.request(left: 2, right: 2), 5)
+		XCTAssertEqual(tree.request(left: 2, right: 3), 8)
+		XCTAssertEqual(tree.request(left: 2, right: 4), 9)
+		XCTAssertEqual(tree.request(left: 2, right: 5), 16)
+		XCTAssertEqual(tree.request(left: 2, right: 6), 18)
+		XCTAssertEqual(tree.request(left: 2, right: 7), 22)
 
-		XCTAssertEqual(request(left: 3, right: 3), 3)
-		XCTAssertEqual(request(left: 3, right: 4), 4)
-		XCTAssertEqual(request(left: 3, right: 5), 11)
-		XCTAssertEqual(request(left: 3, right: 6), 13)
-		XCTAssertEqual(request(left: 3, right: 7), 17)
+		XCTAssertEqual(tree.request(left: 3, right: 3), 3)
+		XCTAssertEqual(tree.request(left: 3, right: 4), 4)
+		XCTAssertEqual(tree.request(left: 3, right: 5), 11)
+		XCTAssertEqual(tree.request(left: 3, right: 6), 13)
+		XCTAssertEqual(tree.request(left: 3, right: 7), 17)
 
-		XCTAssertEqual(request(left: 4, right: 4), 1)
-		XCTAssertEqual(request(left: 4, right: 5), 8)
-		XCTAssertEqual(request(left: 4, right: 6), 10)
-		XCTAssertEqual(request(left: 4, right: 7), 14)
+		XCTAssertEqual(tree.request(left: 4, right: 4), 1)
+		XCTAssertEqual(tree.request(left: 4, right: 5), 8)
+		XCTAssertEqual(tree.request(left: 4, right: 6), 10)
+		XCTAssertEqual(tree.request(left: 4, right: 7), 14)
 
-		XCTAssertEqual(request(left: 5, right: 5), 7)
-		XCTAssertEqual(request(left: 5, right: 6), 9)
-		XCTAssertEqual(request(left: 5, right: 7), 13)
+		XCTAssertEqual(tree.request(left: 5, right: 5), 7)
+		XCTAssertEqual(tree.request(left: 5, right: 6), 9)
+		XCTAssertEqual(tree.request(left: 5, right: 7), 13)
 
-		XCTAssertEqual(request(left: 6, right: 6), 2)
-		XCTAssertEqual(request(left: 6, right: 7), 6)
+		XCTAssertEqual(tree.request(left: 6, right: 6), 2)
+		XCTAssertEqual(tree.request(left: 6, right: 7), 6)
 
-		XCTAssertEqual(request(left: 7, right: 7), 4)
+		XCTAssertEqual(tree.request(left: 7, right: 7), 4)
     }
 	
 	func testUpdate() {
