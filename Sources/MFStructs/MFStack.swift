@@ -57,16 +57,6 @@ public final class MFStack<T> {
 		self.countNodes = 0
 		self.head = nil
 	}
-	
-	public func printNodes() {
-		var iter = self.head
-		while iter != nil {
-			if let value = iter?.value {
-				print(value)
-			}
-			iter = iter?.next
-		}
-	}
 }
 
 extension MFStack: Sequence {

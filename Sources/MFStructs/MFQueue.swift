@@ -28,7 +28,7 @@ public final class MFQueue<T> {
 		self.head == nil
 	}
 	
-	/// Количество элементов в стеке
+	/// Количество элементов в очереди
 	public var count: Int {
 		self.countNodes
 	}
@@ -68,16 +68,6 @@ public final class MFQueue<T> {
 		self.countNodes = 0
 		self.tail = nil
 		self.head = nil
-	}
-	
-	public func printNodes() {
-		var iter = self.head
-		while iter != nil {
-			if let value = iter?.value {
-				print(value)
-			}
-			iter = iter?.next
-		}
 	}
 }
 
