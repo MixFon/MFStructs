@@ -114,23 +114,7 @@ public final class MFDeque<T> {
 
 extension MFDeque: Sequence {
 	
-	public func makeIterator() -> MFListIterator<T> {
-		var iter = self.head
-		var head: MFNode<T>? = nil
-		var lastNode: MFNode<T>? = nil
-		while iter != nil  {
-			if let value = iter?.value {
-				let node = MFNode(value: value)
-				if head == nil {
-					head = node
-					lastNode = head
-				} else {
-					lastNode?.next = node
-					lastNode = node
-				}
-			}
-			iter = iter?.next
-		}
-		return MFListIterator(head: head)
+	public func makeIterator() -> MFDoublyListIterator<T> {
+		return MFDoublyListIterator(head: self.head)
 	}
 }
