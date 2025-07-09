@@ -87,3 +87,21 @@ public class MFHeap<T> {
 		siftDown(from: first)
 	}
 }
+
+public extension MFHeap where T: Comparable {
+	/// Инициализация приоритетной очереди.
+	///
+	/// Для типов, реализующих `Comparable`, предусмотрена реализация по умолчанию,
+	/// которая использует оператор `>`, создавая тем самым очередь с максимальным приоритетом (max-queue).
+	///
+	/// Если вы используете тип, реализующий `Comparable`, и вам нужна очередь с минимальным приоритетом (min-queue),
+	/// вы можете создать её так:
+	///
+	/// ```
+	/// let minHeap = MFHeap(priorityFunction: <)
+	/// ```
+	///
+	convenience init() {
+		self.init(priorityFunction: >)
+	}
+}
