@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MFDoublyListIterator.swift
 //  MFStructs
 //
 //  Created by Михаил Фокин on 01.05.2025.

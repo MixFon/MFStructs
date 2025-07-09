@@ -58,6 +58,44 @@ final class MFDequeTests: XCTestCase {
 		XCTAssertEqual(self.deque?.count, numbers.count)
 	}
 	
+	func testPushFontSequence() {
+		// Arrange
+		let numbers = [1, 2, 3, 4, 5, 6]
+		
+		// Act
+		
+		// Assert
+		XCTAssertNil(self.deque?.front)
+		XCTAssertNil(self.deque?.back)
+		XCTAssertEqual(self.deque?.count, 0)
+		self.deque?.pushFront(numbers)
+		var i = numbers.count - 1
+		while let element = self.deque?.popFront() {
+			XCTAssertEqual(element, numbers[i])
+			i -= 1
+		}
+		XCTAssertEqual(self.deque?.count, 0)
+	}
+	
+	func testPushFontRandomSequence() {
+		// Arrange
+		let numbers = generateRandomIntArray(count: 100, minValue: -1000, maxValue: 1000)
+		
+		// Act
+		
+		// Assert
+		XCTAssertNil(self.deque?.front)
+		XCTAssertNil(self.deque?.back)
+		XCTAssertEqual(self.deque?.count, 0)
+		self.deque?.pushFront(numbers)
+		var i = numbers.count - 1
+		while let element = self.deque?.popFront() {
+			XCTAssertEqual(element, numbers[i])
+			i -= 1
+		}
+		XCTAssertEqual(self.deque?.count, 0)
+	}
+	
 	func testPushBack() {
 		// Arrange
 		let numbers = [1, 2, 3, 4, 5, 6]
@@ -183,6 +221,29 @@ final class MFDequeTests: XCTestCase {
 		XCTAssertNil(self.deque?.front)
 		XCTAssertNil(self.deque?.back)
 		XCTAssertEqual(self.deque?.count, 0)
+	}
+	
+	func testRemoveAllRandom() {
+		// Arrange
+		let numbers = generateRandomIntArray(count: 100, minValue: -1000, maxValue: 1000)
+		
+		// Act
+		
+		// Assert
+		XCTAssertNil(self.deque?.front)
+		XCTAssertNil(self.deque?.back)
+		XCTAssertEqual(self.deque?.count, 0)
+		self.deque?.pushBack(numbers)
+		XCTAssertNotNil(self.deque?.front)
+		XCTAssertNotNil(self.deque?.back)
+		XCTAssertEqual(self.deque?.count, numbers.count)
+		XCTAssertEqual(self.deque?.front, numbers.first)
+		XCTAssertEqual(self.deque?.back, numbers.last)
+		self.deque?.remoreAll()
+		XCTAssertNil(self.deque?.front)
+		XCTAssertNil(self.deque?.back)
+		XCTAssertEqual(self.deque?.count, 0)
+		XCTAssertTrue(self.deque?.isEmpty == true)
 	}
 	
 	func testPopBack() {
